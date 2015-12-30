@@ -12,7 +12,7 @@ import ru.bolobanov.chatclient.R;
  * Created by Bolobanov Nikolay on 25.12.15.
  */
 @EActivity(R.layout.a_chat)
-public class ChatActivity extends Activity {
+public class ChatActivity extends ParentActivity {
 
     public boolean isTablet;
 

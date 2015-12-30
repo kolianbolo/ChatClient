@@ -10,6 +10,21 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activity.LoginActivity_"
+            android:label="@string/app_name" />
+        <activity
+            android:name=".activity.PreferenceActivity"
+            android:label="@string/app_name" />
+
+        <activity
+            android:name=".activity.ChatActivity_"
+            android:label="@string/app_name" />
+
+        <activity
+            android:name=".activity.MobileChatActivity_"
+            android:label="@string/app_name" />
+
+        <activity
+            android:name=".activity.SplashActivity_"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -17,29 +32,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activity.PreferenceActivity"
-            android:label="@string/app_name"/>
-
-        <activity
-            android:name=".activity.ChatActivity_"
-            android:label="@string/app_name"/>
-
-        <activity
-            android:name=".activity.MobileChatActivity_"
-            android:label="@string/app_name"/>
 
         <service
             android:name=".services.LoginService_"
             android:exported="false"
             android:label="login service"
-            android:stopWithTask="true"/>
+            android:stopWithTask="true" />
 
         <service
             android:name=".services.UsersService_"
             android:exported="false"
             android:label="users service"
-            android:stopWithTask="true"/>
+            android:stopWithTask="true" />
 
         <service
             android:name=".services.ReceivingService_"
