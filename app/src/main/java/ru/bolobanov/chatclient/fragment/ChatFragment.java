@@ -219,8 +219,7 @@ public class ChatFragment extends Fragment implements TextView.OnEditorActionLis
             } else {
                 Toast.makeText(getActivity(), "не удалось отправвить сообщение", Toast.LENGTH_SHORT).show();
             }
-            progressDialog.hide();
-            progressDialog = null;
+            progressDialog.dismiss();
         }
     }
 }
