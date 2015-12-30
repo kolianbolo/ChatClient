@@ -10,12 +10,11 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import ru.bolobanov.chatclient.BusProvider;
 import ru.bolobanov.chatclient.Constants;
 import ru.bolobanov.chatclient.HttpHelper;
-import ru.bolobanov.chatclient.MessageDAO;
+import ru.bolobanov.chatclient.Message;
 
 /**
  * Created by Bolobanov Nikolay on 27.12.15.
@@ -51,9 +50,9 @@ public class ReceivingRunnable implements Runnable {
             JSONObject responseJSON = new JSONObject(helper.getMessages(mBaseUrl, mSession));
             Log.d("ReceivingRunnable", responseJSON.toString());
             final JSONArray messagesJSON = responseJSON.getJSONArray("messages");
-            final ArrayList<MessageDAO> messagesList = new ArrayList<>();
+            final ArrayList<Message> messagesList = new ArrayList<>();
             for (int i = 0; i < messagesJSON.length(); i++) {
-                MessageDAO node = new MessageDAO(messagesJSON.getJSONObject(i).getString("message"),
+                Message node = new Message(messagesJSON.getJSONObject(i).getString("message"),
                         messagesJSON.getJSONObject(i).getString("sender"),
                         messagesJSON.getJSONObject(i).getString("receiver"),
                         messagesJSON.getJSONObject(i).getLong("timestamp"));
@@ -69,9 +68,7 @@ public class ReceivingRunnable implements Runnable {
             };
             mainHandler.post(busMessage);
 
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

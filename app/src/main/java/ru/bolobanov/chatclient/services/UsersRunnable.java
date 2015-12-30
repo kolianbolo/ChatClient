@@ -46,7 +46,7 @@ public class UsersRunnable implements Runnable {
         HttpHelper helper = new HttpHelper();
         try {
             JSONObject responseJSON = new JSONObject(helper.getUsers(mBaseUrl));
-            final JSONArray usersJSON = responseJSON.optJSONArray("users");
+            final JSONArray usersJSON = responseJSON.getJSONArray("users");
             Handler mainHandler = new Handler(mContext.getMainLooper());
             Runnable busMessage = new Runnable() {
                 @Override
@@ -57,9 +57,7 @@ public class UsersRunnable implements Runnable {
                 }
             };
             mainHandler.post(busMessage);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

@@ -26,12 +26,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.regex.Pattern;
 
 import ru.bolobanov.chatclient.BusProvider;
 import ru.bolobanov.chatclient.HttpHelper;
-import ru.bolobanov.chatclient.MessageDAO;
+import ru.bolobanov.chatclient.Message;
 import ru.bolobanov.chatclient.PreferencesService_;
 import ru.bolobanov.chatclient.R;
 import ru.bolobanov.chatclient.db.ChatDatabaseHelper;
@@ -81,7 +79,7 @@ public class ChatFragment extends Fragment implements TextView.OnEditorActionLis
         if (receivedIntent != null) {
             if (receivedIntent.hasExtra(COMPANION_KEY)) {
                 String companion = receivedIntent.getStringExtra(COMPANION_KEY);
-                HashMap<String, String> eventMap = new HashMap<String, String>();
+                HashMap<String, String> eventMap = new HashMap<>();
                 eventMap.put(COMPANION_KEY, companion);
                 getCompanion(eventMap);
             }
@@ -101,9 +99,9 @@ public class ChatFragment extends Fragment implements TextView.OnEditorActionLis
 
 
     @Subscribe
-    public void getMessage(ArrayList<MessageDAO> pMessages) {
-        List<MessageDAO> myMessages = new ArrayList<>();
-        for (MessageDAO message : pMessages)
+    public void getMessage(ArrayList<Message> pMessages) {
+        List<Message> myMessages = new ArrayList<>();
+        for (Message message : pMessages)
             if (message.mSender.equals(mCompanion)) {
                 myMessages.add(message);
             }
@@ -118,14 +116,14 @@ public class ChatFragment extends Fragment implements TextView.OnEditorActionLis
         cleanChat();
         receiverText.setText("Чат с " + mCompanion);
         ChatDatabaseHelper dbHelper = new ChatDatabaseHelper(getActivity());
-        List<MessageDAO> historyList = dbHelper.getMessages(mCompanion, mPreferences.login().get());
+        List<Message> historyList = dbHelper.getMessages(mCompanion, mPreferences.login().get());
         addMessagesToChat(historyList);
         hideStub();
     }
 
 
-    private void addMessagesToChat(List<MessageDAO> messagesList) {
-        for (MessageDAO message : messagesList) {
+    private void addMessagesToChat(List<Message> messagesList) {
+        for (Message message : messagesList) {
             chatBuilder.append(simpleDF.format(message.mTimestamp)).append(message.mSender).append(": ").
                     append(message.mMessage).append("\n");
 
@@ -151,7 +149,7 @@ public class ChatFragment extends Fragment implements TextView.OnEditorActionLis
         if (messageStr.isEmpty()) {
             return;
         }
-        MessageDAO messageDAO = new MessageDAO(messageStr, mPreferences.login().get(), mCompanion, 0L);
+        Message messageDAO = new Message(messageStr, mPreferences.login().get(), mCompanion, 0L);
         SendAsynkTask sendAsynkTask = new SendAsynkTask(messageDAO);
         final String address = mPreferences.serverAddress().get();
         final String port = mPreferences.serverPort().get();
@@ -159,7 +157,7 @@ public class ChatFragment extends Fragment implements TextView.OnEditorActionLis
             progressDialog = new ProgressDialog(getActivity());
         }
         progressDialog.show();
-        sendAsynkTask.execute(new StringBuilder("http://").append(address).append(":").append(port).toString(), mPreferences.sessionUUID().get());
+        sendAsynkTask.execute("http://" + address + ":" + port, mPreferences.sessionUUID().get());
     }
 
 
@@ -187,9 +185,9 @@ public class ChatFragment extends Fragment implements TextView.OnEditorActionLis
 
     class SendAsynkTask extends AsyncTask<String, Void, Long> {
 
-        private MessageDAO mMessage;
+        private Message mMessage;
 
-        public SendAsynkTask(MessageDAO sendingMessage) {
+        public SendAsynkTask(Message sendingMessage) {
             mMessage = sendingMessage;
         }
 
@@ -202,9 +200,7 @@ public class ChatFragment extends Fragment implements TextView.OnEditorActionLis
                 if (responseJSON.getInt("error_code") == 0) {
                     return responseJSON.getLong("timestamp");
                 }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             return 0L;
@@ -213,9 +209,9 @@ public class ChatFragment extends Fragment implements TextView.OnEditorActionLis
         @Override
         protected void onPostExecute(Long aLong) {
             if (aLong != 0L) {
-                MessageDAO sendedMessage = new MessageDAO(mMessage.mMessage, mMessage.mSender, mMessage.mReceiver, aLong);
+                Message sendedMessage = new Message(mMessage.mMessage, mMessage.mSender, mMessage.mReceiver, aLong);
                 ChatDatabaseHelper helper = new ChatDatabaseHelper(getActivity());
-                ArrayList<MessageDAO> messagesList = new ArrayList<>();
+                ArrayList<Message> messagesList = new ArrayList<>();
                 messagesList.add(sendedMessage);
                 helper.saveMessages(messagesList);
                 addMessagesToChat(messagesList);

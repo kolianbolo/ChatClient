@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.bolobanov.chatclient.Constants;
-import ru.bolobanov.chatclient.MessageDAO;
+import ru.bolobanov.chatclient.Message;
 
 public class ChatDatabaseHelper extends SQLiteOpenHelper {
 
@@ -41,10 +41,10 @@ public class ChatDatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public void saveMessages(List<MessageDAO> pMessages) {
+    public void saveMessages(List<Message> pMessages) {
         SQLiteDatabase database = getWritableDatabase();
         database.beginTransaction();
-        for (MessageDAO message : pMessages) {
+        for (Message message : pMessages) {
             ContentValues contentValues = new ContentValues();
             contentValues.put(Constants.COLUMN_MESSAGE, message.mMessage);
             contentValues.put(Constants.COLUMN_SENDER, message.mSender);
@@ -57,18 +57,19 @@ public class ChatDatabaseHelper extends SQLiteOpenHelper {
         database.close();
     }
 
-    public List<MessageDAO> getMessages(String first, String second) {
-        List<MessageDAO> returned = new ArrayList<>();
+    public List<Message> getMessages(String first, String second) {
+        List<Message> returned = new ArrayList<>();
         final SQLiteDatabase database = getReadableDatabase();
         String query = new StringBuilder("( ").append(Constants.COLUMN_RECEIVER).append(" like ? AND ").
-                append(Constants.COLUMN_SENDER).append(" like ? ) OR ( ").append(Constants.COLUMN_RECEIVER).append(" like ? AND ").
+                append(Constants.COLUMN_SENDER).append(" like ? ) OR ( ").
+                append(Constants.COLUMN_RECEIVER).append(" like ? AND ").
                 append(Constants.COLUMN_SENDER).append(" like ? )").toString();
         final Cursor cursor = database.query(Constants.HISTORY_TABLE,
                 new String[]{Constants.COLUMN_MESSAGE, Constants.COLUMN_SENDER, Constants.COLUMN_RECEIVER, Constants.COLUMN_TIMESTAMP},
                 query, new String[]{first, second, second, first}, null, null, null, null);
         if (cursor.moveToFirst()) {
             do {
-                MessageDAO article = new MessageDAO(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_MESSAGE)),
+                Message article = new Message(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_MESSAGE)),
                         cursor.getString(cursor.getColumnIndex(Constants.COLUMN_SENDER)),
                         cursor.getString(cursor.getColumnIndex(Constants.COLUMN_RECEIVER)),
                         cursor.getLong(cursor.getColumnIndex(Constants.COLUMN_TIMESTAMP)));

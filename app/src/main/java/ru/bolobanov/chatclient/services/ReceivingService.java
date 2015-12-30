@@ -1,31 +1,24 @@
 package ru.bolobanov.chatclient.services;
 
 import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.v4.app.NotificationManagerCompat;
-import android.text.style.TtsSpan;
-import android.util.Log;
 
 import com.squareup.otto.Subscribe;
 
 import org.androidannotations.annotations.EService;
 import org.androidannotations.annotations.sharedpreferences.Pref;
-import org.json.JSONArray;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import ru.bolobanov.chatclient.BusProvider;
 import ru.bolobanov.chatclient.Constants;
-import ru.bolobanov.chatclient.MessageDAO;
+import ru.bolobanov.chatclient.Message;
 import ru.bolobanov.chatclient.PreferencesService_;
 import ru.bolobanov.chatclient.R;
-import ru.bolobanov.chatclient.activity.ChatActivity;
 import ru.bolobanov.chatclient.activity.ChatActivity_;
 import ru.bolobanov.chatclient.db.ChatDatabaseHelper;
 
@@ -56,7 +49,7 @@ public class ReceivingService extends Service {
     }
 
     @Subscribe
-    public void getMessage(ArrayList<MessageDAO> pMessages) {
+    public void getMessage(ArrayList<Message> pMessages) {
         ChatDatabaseHelper chatDatabaseHelper = new ChatDatabaseHelper(this);
         if (pMessages.size() > 0) {
             chatDatabaseHelper.saveMessages(pMessages);
@@ -67,7 +60,7 @@ public class ReceivingService extends Service {
         }
     }
 
-    public void notification(MessageDAO pMessage) {
+    public void notification(Message pMessage) {
         Notification.Builder builder = new Notification.Builder(this);
         Intent notificationIntent = new Intent(this, ChatActivity_.class);
         PendingIntent contentIntent = PendingIntent.getActivity(this,

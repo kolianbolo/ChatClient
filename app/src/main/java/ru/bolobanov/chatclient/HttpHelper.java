@@ -11,9 +11,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.List;
-
-import okio.BufferedSink;
 
 /**
  * Created by Bolobanov Nikolay on 25.12.15.
@@ -30,10 +27,10 @@ public class HttpHelper {
             = MediaType.parse("application/json; charset=utf-8");
 
     /**
-     * @param pLogin
-     * @param pPassword
-     * @param baseUrl
-     * @return
+     * @param pLogin - логин
+     * @param pPassword - пароль
+     * @param baseUrl - адрес сервера
+     * @return - ответ от сервера
      * @throws JSONException
      * @throws IOException
      */
@@ -43,7 +40,7 @@ public class HttpHelper {
         rootJSON.put("password", pPassword);
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url(new StringBuilder(baseUrl).append(POSTFIX).append(POSTFIX_LOGIN).toString())
+                .url(baseUrl + POSTFIX + POSTFIX_USERS)
                 .post(RequestBody.create(MEDIA_TYPE_JSON, rootJSON.toString()))
                 .build();
         Response response = client.newCall(request).execute();
@@ -54,11 +51,11 @@ public class HttpHelper {
 
     }
 
-    public String getUsers(String baseUrl) throws JSONException, IOException {
+    public String getUsers(String baseUrl) throws IOException {
         JSONObject rootJSON = new JSONObject();
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url(new StringBuilder(baseUrl).append(POSTFIX).append(POSTFIX_USERS).toString())
+                .url(baseUrl + POSTFIX + POSTFIX_USERS)
                 .post(RequestBody.create(MEDIA_TYPE_JSON, rootJSON.toString()))
                 .build();
         Response response = client.newCall(request).execute();
@@ -75,7 +72,7 @@ public class HttpHelper {
         rootJSON.put("session", pSession);
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url(new StringBuilder(baseUrl).append(POSTFIX).append(POSTFIX_GET).toString())
+                .url(baseUrl + POSTFIX + POSTFIX_USERS)
                 .post(RequestBody.create(MEDIA_TYPE_JSON, rootJSON.toString()))
                 .build();
         Response response = client.newCall(request).execute();
@@ -86,14 +83,14 @@ public class HttpHelper {
         return response.body().string();
     }
 
-    public String putMessages(String baseUrl, MessageDAO pMessage, String pSession) throws JSONException, IOException {
+    public String putMessages(String baseUrl, Message pMessage, String pSession) throws JSONException, IOException {
         JSONObject rootJSON = new JSONObject();
         rootJSON.put("message", pMessage.mMessage);
         rootJSON.put("session", pSession);
         rootJSON.put("recipient", pMessage.mReceiver);
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url(new StringBuilder(baseUrl).append(POSTFIX).append(POSTFIX_SET).toString())
+                .url(baseUrl + POSTFIX + POSTFIX_USERS)
                 .post(RequestBody.create(MEDIA_TYPE_JSON, rootJSON.toString()))
                 .build();
         Response response = client.newCall(request).execute();
