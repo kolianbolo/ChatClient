@@ -40,7 +40,7 @@ public class HttpHelper {
         rootJSON.put("password", pPassword);
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url(baseUrl + POSTFIX + POSTFIX_USERS)
+                .url(baseUrl + POSTFIX + POSTFIX_LOGIN)
                 .post(RequestBody.create(MEDIA_TYPE_JSON, rootJSON.toString()))
                 .build();
         Response response = client.newCall(request).execute();
@@ -72,7 +72,7 @@ public class HttpHelper {
         rootJSON.put("session", pSession);
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url(baseUrl + POSTFIX + POSTFIX_USERS)
+                .url(baseUrl + POSTFIX + POSTFIX_GET)
                 .post(RequestBody.create(MEDIA_TYPE_JSON, rootJSON.toString()))
                 .build();
         Response response = client.newCall(request).execute();
@@ -90,7 +90,7 @@ public class HttpHelper {
         rootJSON.put("recipient", pMessage.mReceiver);
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url(baseUrl + POSTFIX + POSTFIX_USERS)
+                .url(baseUrl + POSTFIX + POSTFIX_SET)
                 .post(RequestBody.create(MEDIA_TYPE_JSON, rootJSON.toString()))
                 .build();
         Response response = client.newCall(request).execute();
