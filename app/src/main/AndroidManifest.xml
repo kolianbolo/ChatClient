@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="ru.bolobanov.chatclient">
+
+    <application
+        android:name=".ChatApplication_"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".activity.LoginActivity_"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.PreferenceActivity"
+            android:label="@string/app_name"></activity>
+
+        <activity
+            android:name=".activity.ChatActivity_"
+            android:label="@string/app_name"></activity>
+
+        <activity
+            android:name=".activity.MobileChatActivity_"
+            android:label="@string/app_name"></activity>
+
+        <service
+            android:name=".services.LoginService_"
+            android:exported="false"
+            android:label="login service"
+            android:stopWithTask="true"></service>
+
+        <service
+            android:name=".services.UsersService_"
+            android:exported="false"
+            android:label="users service"
+            android:stopWithTask="true"></service>
+
+        <service
+            android:name=".services.ReceivingService_"
+            android:exported="false"
+            android:label="receiving service"
+            android:stopWithTask="true">
+
+        </service>
+    </application>
+
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+</manifest>

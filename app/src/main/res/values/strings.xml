@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">ChatClient</string>
+
+    <string name="preferences">Настройки</string>
+    <string name="address_header">Настройки сервера</string>
+
+    <string name="address_title">Адрес:</string>
+    <string name="address_dialog_title">Введите адрес:</string>
+    <string name="port_title">Порт:</string>
+    <string name="port_dialog_title">Введите порт:</string>
+    <string name="default_port">8080</string>
+    <string name="default_ip">192.168.1.3</string>
+
+    <string name="history_title">История:</string>
+    <string name="history_dialog_title">Хранить историю сообщений(дней):</string>
+    <string name="default_long_history">31</string>
+
+    <string name = "stub_text">Выберите собеседника</string>
+
+    <string-array name="duration">
+        <item>1 месяц</item>
+        <item>6 месяцев</item>
+        <item>год</item>
+    </string-array>
+
+    <string-array name="duration_values">
+        <item>31</item>
+        <item>183</item>
+        <item>365</item>
+    </string-array>
+</resources>
