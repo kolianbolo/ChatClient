@@ -51,13 +51,15 @@ public class UsersRunnable implements Runnable {
             Runnable busMessage = new Runnable() {
                 @Override
                 public void run() {
-                    BusProvider.getInstance().post(usersJSON);
+                    if(usersJSON != null) {
+                        BusProvider.getInstance().post(usersJSON);
+                    }
                 }
             };
             mainHandler.post(busMessage);
-        } catch (JSONException e) {
-            e.printStackTrace();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
             e.printStackTrace();
         }
     }

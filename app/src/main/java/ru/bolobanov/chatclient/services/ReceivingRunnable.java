@@ -51,7 +51,7 @@ public class ReceivingRunnable implements Runnable {
             JSONObject responseJSON = new JSONObject(helper.getMessages(mBaseUrl, mSession));
             Log.d("ReceivingRunnable", responseJSON.toString());
             final JSONArray messagesJSON = responseJSON.getJSONArray("messages");
-            final List<MessageDAO> messagesList = new ArrayList();
+            final ArrayList<MessageDAO> messagesList = new ArrayList<>();
             for (int i = 0; i < messagesJSON.length(); i++) {
                 MessageDAO node = new MessageDAO(messagesJSON.getJSONObject(i).getString("message"),
                         messagesJSON.getJSONObject(i).getString("sender"),
@@ -60,15 +60,15 @@ public class ReceivingRunnable implements Runnable {
                 messagesList.add(node);
             }
             Handler mainHandler = new Handler(mContext.getMainLooper());
-            if (messagesJSON != null) {
-                Runnable busMessage = new Runnable() {
-                    @Override
-                    public void run() {
-                        BusProvider.getInstance().post(messagesList);
-                    }
-                };
-                mainHandler.post(busMessage);
-            }
+            Runnable busMessage = new Runnable() {
+                @Override
+                public void run() {
+                    BusProvider.getInstance().post(messagesList);
+
+                }
+            };
+            mainHandler.post(busMessage);
+
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (IOException e) {
