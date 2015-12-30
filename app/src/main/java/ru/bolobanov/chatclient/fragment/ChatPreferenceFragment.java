@@ -26,8 +26,8 @@ import ru.bolobanov.chatclient.services.UsersService_;
 @EFragment
 public class ChatPreferenceFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    public final static String PORT_KEY = "serverPort";
-    public final static String ADDRESS_KEY = "serverAddress";
+    private final static String PORT_KEY = "serverPort";
+    private final static String ADDRESS_KEY = "serverAddress";
 
     private static final Pattern ADDRESS_PATTERN
             = Pattern.compile(

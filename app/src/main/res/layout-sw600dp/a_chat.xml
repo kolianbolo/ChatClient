@@ -4,21 +4,17 @@
     android:layout_height="match_parent"
     android:orientation="horizontal">
 
-
     <fragment
         android:id="@+id/fragment_list"
         class="ru.bolobanov.chatclient.fragment.UsersListFragment_"
         android:layout_width="420dp"
-        android:layout_height="match_parent">
-
-    </fragment>
+        android:layout_height="match_parent"/>
 
     <fragment
         android:id="@+id/fragment_chat"
         class="ru.bolobanov.chatclient.fragment.ChatFragment_"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="3"></fragment>
-
+        android:layout_weight="3"/>
 
 </LinearLayout>

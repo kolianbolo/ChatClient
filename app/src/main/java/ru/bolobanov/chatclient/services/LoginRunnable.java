@@ -3,18 +3,8 @@ package ru.bolobanov.chatclient.services;
 import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
-import android.widget.Toast;
 
-import org.json.JSONException;
 import org.json.JSONObject;
-import org.xml.sax.SAXException;
-
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.List;
-
-import javax.xml.parsers.ParserConfigurationException;
 
 import ru.bolobanov.chatclient.BusProvider;
 import ru.bolobanov.chatclient.HttpHelper;
@@ -22,12 +12,12 @@ import ru.bolobanov.chatclient.HttpHelper;
 /**
  * Created by Bolobanov Nikolay on 25.12.15.
  */
-public class LoginRunnable implements Runnable {
+class LoginRunnable implements Runnable {
 
-    private String mLogin;
-    private String mPassword;
-    private String mBaseUrl;
-    private Context mContext;
+    private final String mLogin;
+    private final String mPassword;
+    private final String mBaseUrl;
+    private final Context mContext;
 
 
     public LoginRunnable(Context pContext, String pLogin, String pPassword, String pBaseUrl) {

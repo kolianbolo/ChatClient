@@ -17,19 +17,19 @@ import java.io.IOException;
  */
 @EBean
 public class HttpHelper {
-    public final static String POSTFIX = "/ru.bolobanov.chat-1.0-SNAPSHOT/";
-    public final static String POSTFIX_LOGIN = "login/";
-    public final static String POSTFIX_USERS = "users/";
-    public final static String POSTFIX_SET = "receiver/";
-    public final static String POSTFIX_GET = "sender/";
+    private final static String POSTFIX = "/ru.bolobanov.chat-1.0-SNAPSHOT/";
+    private final static String POSTFIX_LOGIN = "login/";
+    private final static String POSTFIX_USERS = "users/";
+    private final static String POSTFIX_SET = "receiver/";
+    private final static String POSTFIX_GET = "sender/";
 
     public static final MediaType MEDIA_TYPE_JSON
             = MediaType.parse("application/json; charset=utf-8");
 
     /**
-     * @param pLogin - логин
+     * @param pLogin    - логин
      * @param pPassword - пароль
-     * @param baseUrl - адрес сервера
+     * @param baseUrl   - адрес сервера
      * @return - ответ от сервера
      * @throws JSONException
      * @throws IOException

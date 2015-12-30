@@ -5,10 +5,8 @@ import android.os.Handler;
 import android.util.Log;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import ru.bolobanov.chatclient.BusProvider;
@@ -19,11 +17,11 @@ import ru.bolobanov.chatclient.Message;
 /**
  * Created by Bolobanov Nikolay on 27.12.15.
  */
-public class ReceivingRunnable implements Runnable {
+class ReceivingRunnable implements Runnable {
 
-    private Context mContext;
+    private final Context mContext;
     private String mBaseUrl;
-    private String mSession;
+    private final String mSession;
 
     public ReceivingRunnable(String pBaseUrl, String pSession, Context pContext) {
         mBaseUrl = pBaseUrl;

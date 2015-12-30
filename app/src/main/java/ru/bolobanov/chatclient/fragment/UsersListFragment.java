@@ -2,7 +2,6 @@ package ru.bolobanov.chatclient.fragment;
 
 import android.app.Fragment;
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -17,14 +16,12 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import ru.bolobanov.chatclient.BusProvider;
 import ru.bolobanov.chatclient.PreferencesService_;
 import ru.bolobanov.chatclient.R;
 import ru.bolobanov.chatclient.UsersAdapter;
 import ru.bolobanov.chatclient.activity.ChatActivity;
-import ru.bolobanov.chatclient.activity.MobileChatActivity;
 import ru.bolobanov.chatclient.activity.MobileChatActivity_;
 
 /**
@@ -41,7 +38,7 @@ public class UsersListFragment extends Fragment {
 
     @AfterViews
     public void init() {
-        List<String> users = new ArrayList<String>();
+        List<String> users = new ArrayList<>();
         try {
             JSONArray usersJSON = new JSONArray(mPreferences.users().get());
             for (int i = 0; i < usersJSON.length(); i++) {
@@ -55,7 +52,7 @@ public class UsersListFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String receiver = (String) parent.getItemAtPosition(position);
-                HashMap<String, String> openChatEvent = new HashMap<String, String>();
+                HashMap<String, String> openChatEvent = new HashMap<>();
                 openChatEvent.put(ChatFragment.COMPANION_KEY, receiver);
                 BusProvider.getInstance().post(openChatEvent);
                 if (!((ChatActivity) getActivity()).isTablet) {

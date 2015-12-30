@@ -5,12 +5,7 @@ import android.os.Handler;
 import android.util.Log;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import ru.bolobanov.chatclient.BusProvider;
 import ru.bolobanov.chatclient.Constants;
@@ -19,10 +14,10 @@ import ru.bolobanov.chatclient.HttpHelper;
 /**
  * Created by Bolobanov Nikolay on 26.12.15.
  */
-public class UsersRunnable implements Runnable {
+class UsersRunnable implements Runnable {
 
-    private Context mContext;
-    private String mBaseUrl;
+    private final Context mContext;
+    private final String mBaseUrl;
 
     public UsersRunnable(String pBaseUrl, Context pContext) {
         mBaseUrl = pBaseUrl;
@@ -51,9 +46,7 @@ public class UsersRunnable implements Runnable {
             Runnable busMessage = new Runnable() {
                 @Override
                 public void run() {
-                    if(usersJSON != null) {
-                        BusProvider.getInstance().post(usersJSON);
-                    }
+                    BusProvider.getInstance().post(usersJSON);
                 }
             };
             mainHandler.post(busMessage);

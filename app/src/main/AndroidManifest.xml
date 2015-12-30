@@ -19,27 +19,27 @@
         </activity>
         <activity
             android:name=".activity.PreferenceActivity"
-            android:label="@string/app_name"></activity>
+            android:label="@string/app_name"/>
 
         <activity
             android:name=".activity.ChatActivity_"
-            android:label="@string/app_name"></activity>
+            android:label="@string/app_name"/>
 
         <activity
             android:name=".activity.MobileChatActivity_"
-            android:label="@string/app_name"></activity>
+            android:label="@string/app_name"/>
 
         <service
             android:name=".services.LoginService_"
             android:exported="false"
             android:label="login service"
-            android:stopWithTask="true"></service>
+            android:stopWithTask="true"/>
 
         <service
             android:name=".services.UsersService_"
             android:exported="false"
             android:label="users service"
-            android:stopWithTask="true"></service>
+            android:stopWithTask="true"/>
 
         <service
             android:name=".services.ReceivingService_"

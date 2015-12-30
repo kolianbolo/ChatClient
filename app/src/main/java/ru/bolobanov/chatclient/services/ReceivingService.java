@@ -40,8 +40,8 @@ public class ReceivingService extends Service {
         }
         final String address = mPreferences.serverAddress().get();
         final String port = mPreferences.serverPort().get();
-        mReceivingThread = new Thread(new ReceivingRunnable(new StringBuilder("http://").append(address).
-                append(":").append(port).toString(), mPreferences.sessionUUID().get(), this));
+        mReceivingThread = new Thread(new ReceivingRunnable("http://" + address + ":" + port,
+                mPreferences.sessionUUID().get(), this));
         BusProvider.getInstance().register(this);
         BusProvider.getInstance().register(mReceivingThread);
         mReceivingThread.start();
@@ -60,7 +60,7 @@ public class ReceivingService extends Service {
         }
     }
 
-    public void notification(Message pMessage) {
+    private void notification(Message pMessage) {
         Notification.Builder builder = new Notification.Builder(this);
         Intent notificationIntent = new Intent(this, ChatActivity_.class);
         PendingIntent contentIntent = PendingIntent.getActivity(this,

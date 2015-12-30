@@ -18,10 +18,8 @@ import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.sharedpreferences.Pref;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -185,7 +183,7 @@ public class ChatFragment extends Fragment implements TextView.OnEditorActionLis
 
     class SendAsynkTask extends AsyncTask<String, Void, Long> {
 
-        private Message mMessage;
+        private final Message mMessage;
 
         public SendAsynkTask(Message sendingMessage) {
             mMessage = sendingMessage;
