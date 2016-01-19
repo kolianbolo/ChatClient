@@ -17,7 +17,7 @@ import java.io.IOException;
  */
 @EBean
 public class HttpHelper {
-    private final static String POSTFIX = "/ru.bolobanov.chat-1.0-SNAPSHOT/";
+    private final static String POSTFIX = "/ru.bolobanov.chat-1.0-SNAPSHOT/rest/";
     private final static String POSTFIX_LOGIN = "login/";
     private final static String POSTFIX_USERS = "users/";
     private final static String POSTFIX_SET = "receiver/";
