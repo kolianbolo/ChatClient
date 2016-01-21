@@ -12,15 +12,17 @@ import com.squareup.otto.Subscribe;
 import org.androidannotations.annotations.EService;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import ru.bolobanov.chatclient.BusProvider;
 import ru.bolobanov.chatclient.Constants;
-import ru.bolobanov.chatclient.Message;
 import ru.bolobanov.chatclient.PreferencesService_;
 import ru.bolobanov.chatclient.R;
 import ru.bolobanov.chatclient.activity.ChatActivity_;
-import ru.bolobanov.chatclient.db.ChatDatabaseHelper;
+import ru.bolobanov.chatclient.db.DataBaseHelper;
+import ru.bolobanov.chatclient.db.HelperFactory;
+import ru.bolobanov.chatclient.db.mapping.Message;
 
 /**
  * Created by Bolobanov Nikolay on 27.12.15.
@@ -50,13 +52,19 @@ public class ReceivingService extends Service {
 
     @Subscribe
     public void getMessage(ArrayList<Message> pMessages) {
-        ChatDatabaseHelper chatDatabaseHelper = new ChatDatabaseHelper(this);
+        DataBaseHelper databaseHelper = HelperFactory.getHelper();
         if (pMessages.size() > 0) {
-            chatDatabaseHelper.saveMessages(pMessages);
-            long deadLine = pMessages.get(0).mTimestamp -
-                    Long.parseLong(mPreferences.lengthHistory().get()) * 24 * 60 * 60 * 1000;
-            chatDatabaseHelper.deleteOldMessage(deadLine);
-            notification(pMessages.get(0));
+            try {
+                for(Message message : pMessages) {
+                    databaseHelper.getMessageDAO().create(message);
+                }
+              long deadLine = pMessages.get(0).getTimestamp() -
+              Long.parseLong(mPreferences.lengthHistory().get()) * 24 * 60 * 60 * 1000;
+              databaseHelper.getMessageDAO().deleteOldMessages(deadLine);
+                notification(pMessages.get(0));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -70,8 +78,8 @@ public class ReceivingService extends Service {
         builder.setContentIntent(contentIntent)
                 .setSmallIcon(R.drawable.settings)
                 .setAutoCancel(true)
-                .setContentTitle(pMessage.mSender)
-                .setContentText(pMessage.mMessage);
+                .setContentTitle(pMessage.getSender())
+                .setContentText(pMessage.getMessage());
         Notification notification = builder.build();
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
         notificationManager.notify(Constants.NOTIFY_ID, notification);

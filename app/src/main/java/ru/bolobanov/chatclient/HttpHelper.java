@@ -12,10 +12,11 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
+import ru.bolobanov.chatclient.db.mapping.Message;
+
 /**
  * Created by Bolobanov Nikolay on 25.12.15.
  */
-@EBean
 public class HttpHelper {
     private final static String POSTFIX = "/ru.bolobanov.chat-1.0-SNAPSHOT/rest/";
     private final static String POSTFIX_LOGIN = "login/";
@@ -85,9 +86,9 @@ public class HttpHelper {
 
     public String putMessages(String baseUrl, Message pMessage, String pSession) throws JSONException, IOException {
         JSONObject rootJSON = new JSONObject();
-        rootJSON.put("message", pMessage.mMessage);
+        rootJSON.put("message", pMessage.getMessage());
         rootJSON.put("session", pSession);
-        rootJSON.put("recipient", pMessage.mReceiver);
+        rootJSON.put("recipient", pMessage.getReceiver());
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(baseUrl + POSTFIX + POSTFIX_SET)

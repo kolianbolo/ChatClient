@@ -20,6 +20,7 @@ import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 import org.json.JSONObject;
 
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,10 +28,11 @@ import java.util.List;
 
 import ru.bolobanov.chatclient.BusProvider;
 import ru.bolobanov.chatclient.HttpHelper;
-import ru.bolobanov.chatclient.Message;
+import ru.bolobanov.chatclient.db.HelperFactory;
+import ru.bolobanov.chatclient.db.mapping.Message;
 import ru.bolobanov.chatclient.PreferencesService_;
 import ru.bolobanov.chatclient.R;
-import ru.bolobanov.chatclient.db.ChatDatabaseHelper;
+import ru.bolobanov.chatclient.db.DataBaseHelper;
 
 /**
  * Created by Bolobanov Nikolay on 26.12.15.
@@ -100,7 +102,7 @@ public class ChatFragment extends Fragment implements TextView.OnEditorActionLis
     public void getMessage(ArrayList<Message> pMessages) {
         List<Message> myMessages = new ArrayList<>();
         for (Message message : pMessages)
-            if (message.mSender.equals(mCompanion)) {
+            if (message.getSender().equals(mCompanion)) {
                 myMessages.add(message);
             }
         if (myMessages.size() > 0) {
@@ -113,17 +115,21 @@ public class ChatFragment extends Fragment implements TextView.OnEditorActionLis
         mCompanion = openChatEvent.get(COMPANION_KEY);
         cleanChat();
         receiverText.setText("Чат с " + mCompanion);
-        ChatDatabaseHelper dbHelper = new ChatDatabaseHelper(getActivity());
-        List<Message> historyList = dbHelper.getMessages(mCompanion, mPreferences.login().get());
-        addMessagesToChat(historyList);
+        DataBaseHelper dbHelper = HelperFactory.getHelper();
+        try {
+            List<Message> historyList = dbHelper.getMessageDAO().getMessages(mCompanion, mPreferences.login().get());
+            addMessagesToChat(historyList);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         hideStub();
     }
 
 
     private void addMessagesToChat(List<Message> messagesList) {
         for (Message message : messagesList) {
-            chatBuilder.append(simpleDF.format(message.mTimestamp)).append(message.mSender).append(": ").
-                    append(message.mMessage).append("\n");
+            chatBuilder.append(simpleDF.format(message.getTimestamp())).append(message.getSender()).append(": ").
+                    append(message.getMessage()).append("\n");
 
         }
 
@@ -147,8 +153,11 @@ public class ChatFragment extends Fragment implements TextView.OnEditorActionLis
         if (messageStr.isEmpty()) {
             return;
         }
-        Message messageDAO = new Message(messageStr, mPreferences.login().get(), mCompanion, 0L);
-        SendAsynkTask sendAsynkTask = new SendAsynkTask(messageDAO);
+        Message message = new Message();
+        message.setMessage(messageStr);
+        message.setReceiver(mCompanion);
+        message.setSender(mPreferences.login().get());
+        SendAsynkTask sendAsynkTask = new SendAsynkTask(message);
         final String address = mPreferences.serverAddress().get();
         final String port = mPreferences.serverPort().get();
         if (progressDialog == null) {
@@ -205,17 +214,21 @@ public class ChatFragment extends Fragment implements TextView.OnEditorActionLis
         }
 
         @Override
-        protected void onPostExecute(Long aLong) {
-            if (aLong != 0L) {
-                Message sendedMessage = new Message(mMessage.mMessage, mMessage.mSender, mMessage.mReceiver, aLong);
-                ChatDatabaseHelper helper = new ChatDatabaseHelper(getActivity());
+        protected void onPostExecute(Long aTimestamp) {
+            if (aTimestamp != 0L) {
+                mMessage.setTimestamp(aTimestamp);
+                DataBaseHelper helper = HelperFactory.getHelper();
                 ArrayList<Message> messagesList = new ArrayList<>();
-                messagesList.add(sendedMessage);
-                helper.saveMessages(messagesList);
-                addMessagesToChat(messagesList);
-                messageEdit.setText("");
+                messagesList.add(mMessage);
+                try {
+                    helper.getMessageDAO().create(mMessage);
+                    addMessagesToChat(messagesList);
+                    messageEdit.setText("");
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             } else {
-                Toast.makeText(getActivity(), "не удалось отправвить сообщение", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "не удалось отправить сообщение", Toast.LENGTH_SHORT).show();
             }
             progressDialog.dismiss();
         }

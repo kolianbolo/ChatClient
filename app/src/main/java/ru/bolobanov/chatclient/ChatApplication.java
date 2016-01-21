@@ -5,6 +5,7 @@ import android.content.Intent;
 
 import org.androidannotations.annotations.EApplication;
 
+import ru.bolobanov.chatclient.db.HelperFactory;
 import ru.bolobanov.chatclient.services.UsersService_;
 
 
@@ -17,5 +18,12 @@ public class ChatApplication extends Application {
     public void onCreate() {
         startService(new Intent(this, UsersService_.class));
         super.onCreate();
+        HelperFactory.setHelper(this.getApplicationContext());
+    }
+
+    @Override
+    public void onTerminate() {
+        HelperFactory.releaseHelper();
+        super.onTerminate();
     }
 }
