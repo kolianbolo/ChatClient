@@ -15,4 +15,6 @@ public final class Constants {
 
     public static final int GET_MESSAGES_PERIOD = 3 * 1000;
     public static final int GET_USERS_PERIOD = 30 * 1000;
+
+    public static final int SMALLEST_SCREEN_WIDTH_DP = 600;
 }

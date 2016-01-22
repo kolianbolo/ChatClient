@@ -21,6 +21,7 @@ import ru.bolobanov.chat_client.db.DataBaseHelper;
 import ru.bolobanov.chat_client.db.HelperFactory;
 import ru.bolobanov.chat_client.db.mapping.Message;
 import ru.bolobanov.chat_client.events.MessagesResponseEvent;
+import ru.bolobanov.chat_client.fragment.ChatFragment;
 
 /**
  * Created by Bolobanov Nikolay on 27.12.15.
@@ -68,6 +69,7 @@ public class ReceivingService extends Service {
     private void notification(Message pMessage) {
         Notification.Builder builder = new Notification.Builder(this);
         Intent notificationIntent = new Intent(this, ChatActivity_.class);
+        notificationIntent.putExtra(ChatFragment.COMPANION_KEY, pMessage.getSender());
         PendingIntent contentIntent = PendingIntent.getActivity(this,
                 0, notificationIntent,
                 PendingIntent.FLAG_CANCEL_CURRENT);

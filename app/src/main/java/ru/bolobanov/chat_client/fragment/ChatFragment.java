@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -38,7 +39,7 @@ import ru.bolobanov.chat_client.events.OpenChatEvent;
 @EFragment(R.layout.f_chat)
 public class ChatFragment extends Fragment implements TextView.OnEditorActionListener {
 
-    private static final String COMPANION_KEY = "companion";
+    public static final String COMPANION_KEY = "companion";
 
     @ViewById
     LinearLayout stubLinear;
@@ -100,6 +101,7 @@ public class ChatFragment extends Fragment implements TextView.OnEditorActionLis
     }
 
     public void onEvent(OpenChatEvent event) {
+        Log.d("", "OpenChatEvent = " + event.mCompanion);
         mCompanion = event.mCompanion;
         cleanChat();
         receiverText.setText("Чат с " + mCompanion);

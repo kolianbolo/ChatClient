@@ -1,7 +1,10 @@
 package ru.bolobanov.chat_client.fragment;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Intent;
+import android.os.Debug;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -17,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.greenrobot.event.EventBus;
+import ru.bolobanov.chat_client.Constants;
 import ru.bolobanov.chat_client.PreferencesService_;
 import ru.bolobanov.chat_client.R;
 import ru.bolobanov.chat_client.UsersAdapter;
@@ -52,11 +56,21 @@ public class UsersListFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String receiver = (String) parent.getItemAtPosition(position);
-                EventBus.getDefault().postSticky(new OpenChatEvent(receiver));
-                if (!((ChatActivity) getActivity()).isTablet) {
-                    startActivity(new Intent(getActivity(), MobileChatActivity_.class));
-                }
+                openChat(receiver);
             }
         });
+        String companion = getActivity().getIntent().getStringExtra(ChatFragment.COMPANION_KEY);
+        if (companion != null) {
+            EventBus.getDefault().removeAllStickyEvents();
+            openChat(companion);
+        }
+    }
+
+    private void openChat(String pCompanion) {
+        EventBus.getDefault().postSticky(new OpenChatEvent(pCompanion));
+        FragmentManager fragmentManager = getActivity().getFragmentManager();
+        if (getResources().getConfiguration().smallestScreenWidthDp < Constants.SMALLEST_SCREEN_WIDTH_DP) {
+            startActivity(new Intent(getActivity(), MobileChatActivity_.class));
+        }
     }
 }
