@@ -127,6 +127,7 @@ public class ChatFragment extends Fragment implements TextView.OnEditorActionLis
         }
 
         chatEdit.setText(chatBuilder.toString());
+        chatEdit.setSelection(chatEdit.getText().length());
     }
 
     private void cleanChat() {
