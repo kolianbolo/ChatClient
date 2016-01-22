@@ -22,7 +22,6 @@ import ru.bolobanov.chat_client.PreferencesService_;
 import ru.bolobanov.chat_client.R;
 import ru.bolobanov.chat_client.UsersAdapter;
 import ru.bolobanov.chat_client.activity.MobileChatActivity_;
-import ru.bolobanov.chat_client.events.MessagesResponseEvent;
 import ru.bolobanov.chat_client.events.OpenChatEvent;
 import ru.bolobanov.chat_client.events.UsersResponseEvent;
 

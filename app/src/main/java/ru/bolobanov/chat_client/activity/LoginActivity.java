@@ -1,7 +1,11 @@
 package ru.bolobanov.chat_client.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.provider.Settings;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -40,10 +44,15 @@ public class LoginActivity extends Activity {
 
     @Click(R.id.loginButton)
     public void clickLogin() {
-        Intent intent = new Intent(this, LoginService_.class);
-        intent.putExtra("login", loginEdit.getText().toString());
-        intent.putExtra("password", passwordEdit.getText().toString());
-        startService(intent);
+        if (isOnline()) {
+            Intent intent = new Intent(this, LoginService_.class);
+            intent.putExtra("login", loginEdit.getText().toString());
+            intent.putExtra("password", passwordEdit.getText().toString());
+            startService(intent);
+        } else {
+            Toast.makeText(this, "Отсутствует подключение к интернету", Toast.LENGTH_LONG).show();
+            startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
+        }
     }
 
     public void onResume() {
@@ -51,12 +60,12 @@ public class LoginActivity extends Activity {
         EventBus.getDefault().register(this);
     }
 
-    public void onEventMainThread(TextEvent event){
+    public void onEventMainThread(TextEvent event) {
         Toast.makeText(this, event.mText, Toast.LENGTH_LONG).show();
     }
 
 
-    public void onEventMainThread(LoginResponseEvent event){
+    public void onEventMainThread(LoginResponseEvent event) {
         Log.d("getResponse()", event.mResponse.toString());
         JSONObject userObject = event.mResponse.optJSONObject("user");
         if (userObject != null) {
@@ -73,6 +82,12 @@ public class LoginActivity extends Activity {
             startActivity(new Intent(this, ChatActivity_.class).
                     setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
         }
+    }
+
+    private boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
     public void onPause() {
