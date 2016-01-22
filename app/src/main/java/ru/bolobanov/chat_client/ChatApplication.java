@@ -16,7 +16,6 @@ import ru.bolobanov.chat_client.services.UsersService_;
 public class ChatApplication extends Application {
     @Override
     public void onCreate() {
-        startService(new Intent(this, UsersService_.class));
         super.onCreate();
         HelperFactory.setHelper(this.getApplicationContext());
     }

@@ -19,6 +19,7 @@ import ru.bolobanov.chat_client.events.LoginResponseEvent;
 import ru.bolobanov.chat_client.events.TextEvent;
 import ru.bolobanov.chat_client.services.LoginService_;
 import ru.bolobanov.chat_client.services.ReceivingService_;
+import ru.bolobanov.chat_client.services.UsersService_;
 
 @EActivity(R.layout.a_login)
 public class LoginActivity extends Activity {
@@ -67,6 +68,7 @@ public class LoginActivity extends Activity {
             }
             mPreferences.sessionUUID().put(sessionString);
             mPreferences.login().put(loginString);
+            startService(new Intent(this, UsersService_.class));
             startService(new Intent(this, ReceivingService_.class));
             startActivity(new Intent(this, ChatActivity_.class).
                     setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
