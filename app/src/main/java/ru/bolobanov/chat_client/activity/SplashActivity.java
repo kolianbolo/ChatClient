@@ -20,7 +20,7 @@ public class SplashActivity extends Activity {
 
 
     @Pref
-    PreferencesService_ mPreferences;
+    protected PreferencesService_ mPreferences;
 
     @AfterViews
     public void init() {

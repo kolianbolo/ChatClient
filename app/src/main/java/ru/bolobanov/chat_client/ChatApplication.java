@@ -1,12 +1,10 @@
 package ru.bolobanov.chat_client;
 
 import android.app.Application;
-import android.content.Intent;
 
 import org.androidannotations.annotations.EApplication;
 
 import ru.bolobanov.chat_client.db.HelperFactory;
-import ru.bolobanov.chat_client.services.UsersService_;
 
 
 /**

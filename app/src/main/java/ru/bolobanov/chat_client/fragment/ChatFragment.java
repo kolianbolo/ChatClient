@@ -42,22 +42,22 @@ public class ChatFragment extends Fragment implements TextView.OnEditorActionLis
     public static final String COMPANION_KEY = "companion";
 
     @ViewById
-    LinearLayout stubLinear;
+    protected LinearLayout stubLinear;
 
     @ViewById
-    LinearLayout contentLinear;
+    protected LinearLayout contentLinear;
 
     @ViewById
-    EditText chatEdit;
+    protected EditText chatEdit;
 
     @ViewById
-    EditText messageEdit;
+    protected EditText messageEdit;
 
     @ViewById
-    TextView receiverText;
+    protected TextView receiverText;
 
     @Pref
-    PreferencesService_ mPreferences;
+    protected PreferencesService_ mPreferences;
 
     private ProgressDialog progressDialog;
 
@@ -149,7 +149,7 @@ public class ChatFragment extends Fragment implements TextView.OnEditorActionLis
     }
 
     @Click(R.id.sendButton)
-    public void onSend() {
+    protected void onSend() {
         String messageStr = messageEdit.getText().toString();
         if (messageStr.isEmpty()) {
             return;

@@ -21,7 +21,7 @@ public class UsersService extends Service {
     private Thread mUsersThread;
 
     @Pref
-    PreferencesService_ mPreferences;
+    protected PreferencesService_ mPreferences;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {

@@ -1,7 +1,5 @@
 package ru.bolobanov.chat_client.services;
 
-import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -70,6 +68,4 @@ class ReceivingRunnable implements Runnable {
              }
              EventBus.getDefault().postSticky(new MessagesResponseEvent(messagesList));
          }
-
-
 }

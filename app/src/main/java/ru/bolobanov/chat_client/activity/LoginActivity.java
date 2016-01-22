@@ -29,13 +29,13 @@ import ru.bolobanov.chat_client.services.UsersService_;
 public class LoginActivity extends Activity {
 
     @ViewById
-    EditText loginEdit;
+    protected EditText loginEdit;
 
     @ViewById
-    EditText passwordEdit;
+    protected EditText passwordEdit;
 
     @Pref
-    PreferencesService_ mPreferences;
+    protected PreferencesService_ mPreferences;
 
     @Click(R.id.settingsButton)
     public void clickSettings() {

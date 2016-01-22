@@ -79,7 +79,6 @@ public class HttpHelper {
         if (response.code() != 200) {
             throw new IOException();
         }
-
         return response.body().string();
     }
 

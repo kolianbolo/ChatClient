@@ -18,7 +18,7 @@ public class LoginService extends Service {
     private Thread mLoginThread;
 
     @Pref
-    PreferencesService_ mPreferences;
+    protected PreferencesService_ mPreferences;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {

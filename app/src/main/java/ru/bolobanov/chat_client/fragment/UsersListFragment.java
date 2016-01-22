@@ -32,10 +32,10 @@ import ru.bolobanov.chat_client.events.UsersResponseEvent;
 public class UsersListFragment extends Fragment {
 
     @ViewById
-    ListView list;
+    protected ListView list;
 
     @Pref
-    PreferencesService_ mPreferences;
+    protected PreferencesService_ mPreferences;
 
     @AfterViews
     public void init() {

@@ -32,7 +32,7 @@ public class ReceivingService extends Service {
     private Thread mReceivingThread;
 
     @Pref
-    PreferencesService_ mPreferences;
+    protected PreferencesService_ mPreferences;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
