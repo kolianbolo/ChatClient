@@ -4,14 +4,14 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 
-import com.squareup.otto.Subscribe;
-
 import org.androidannotations.annotations.EService;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 import org.json.JSONArray;
 
-import ru.bolobanov.chatclient.BusProvider;
+import de.greenrobot.event.EventBus;
 import ru.bolobanov.chatclient.PreferencesService_;
+import ru.bolobanov.chatclient.events.MessagesResponseEvent;
+import ru.bolobanov.chatclient.events.UsersResponseEvent;
 
 /**
  * Created by Bolobanov Nikolay on 26.12.15.
@@ -27,27 +27,24 @@ public class UsersService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (mUsersThread != null) {
-            BusProvider.getInstance().unregister(mUsersThread);
             mUsersThread.interrupt();
         }
         final String address = mPreferences.serverAddress().get();
         final String port = mPreferences.serverPort().get();
         mUsersThread = new Thread(new UsersRunnable("http://" + address + ":" + port, this));
-        BusProvider.getInstance().register(this);
-        BusProvider.getInstance().register(mUsersThread);
+        EventBus.getDefault().register(this);
         mUsersThread.start();
         return START_STICKY;
     }
 
-    @Subscribe
-    public void getMessage(JSONArray usersJSON) {
-        mPreferences.users().put(usersJSON.toString());
+    public void onEventMainThread(UsersResponseEvent event) {
+
+        mPreferences.users().put(event.usersArray.toString());
     }
 
     @Override
     public void onDestroy() {
-        BusProvider.getInstance().unregister(mUsersThread);
-        BusProvider.getInstance().unregister(this);
+        EventBus.getDefault().unregister(this);
         mUsersThread.interrupt();
         super.onDestroy();
     }

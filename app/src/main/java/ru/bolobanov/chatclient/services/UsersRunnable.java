@@ -7,9 +7,10 @@ import android.util.Log;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import ru.bolobanov.chatclient.BusProvider;
+import de.greenrobot.event.EventBus;
 import ru.bolobanov.chatclient.Constants;
 import ru.bolobanov.chatclient.HttpHelper;
+import ru.bolobanov.chatclient.events.UsersResponseEvent;
 
 /**
  * Created by Bolobanov Nikolay on 26.12.15.
@@ -42,14 +43,7 @@ class UsersRunnable implements Runnable {
         try {
             JSONObject responseJSON = new JSONObject(helper.getUsers(mBaseUrl));
             final JSONArray usersJSON = responseJSON.getJSONArray("users");
-            Handler mainHandler = new Handler(mContext.getMainLooper());
-            Runnable busMessage = new Runnable() {
-                @Override
-                public void run() {
-                    BusProvider.getInstance().post(usersJSON);
-                }
-            };
-            mainHandler.post(busMessage);
+            EventBus.getDefault().post(new UsersResponseEvent(usersJSON));
         } catch (Exception e) {
             e.printStackTrace();
         }

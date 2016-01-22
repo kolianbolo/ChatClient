@@ -6,17 +6,17 @@ import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.squareup.otto.Subscribe;
-
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 import org.json.JSONObject;
 
-import ru.bolobanov.chatclient.BusProvider;
+import de.greenrobot.event.EventBus;
 import ru.bolobanov.chatclient.PreferencesService_;
 import ru.bolobanov.chatclient.R;
+import ru.bolobanov.chatclient.events.LoginResponseEvent;
+import ru.bolobanov.chatclient.events.TextEvent;
 import ru.bolobanov.chatclient.services.LoginService_;
 import ru.bolobanov.chatclient.services.ReceivingService_;
 
@@ -47,19 +47,17 @@ public class LoginActivity extends Activity {
 
     public void onResume() {
         super.onResume();
-        BusProvider.getInstance().register(this);
+        EventBus.getDefault().register(this);
+    }
+
+    public void onEventMainThread(TextEvent event){
+        Toast.makeText(this, event.mText, Toast.LENGTH_LONG).show();
     }
 
 
-    @Subscribe
-    public void getMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-    }
-
-    @Subscribe
-    public void getResponse(JSONObject jsonResponse) {
-        Log.d("getResponse()", jsonResponse.toString());
-        JSONObject userObject = jsonResponse.optJSONObject("user");
+    public void onEventMainThread(LoginResponseEvent event){
+        Log.d("getResponse()", event.mResponse.toString());
+        JSONObject userObject = event.mResponse.optJSONObject("user");
         if (userObject != null) {
             String sessionString = userObject.optString("session");
             String loginString = userObject.optString("login");
@@ -76,7 +74,7 @@ public class LoginActivity extends Activity {
     }
 
     public void onPause() {
-        BusProvider.getInstance().unregister(this);
+        EventBus.getDefault().unregister(this);
         super.onPause();
     }
 

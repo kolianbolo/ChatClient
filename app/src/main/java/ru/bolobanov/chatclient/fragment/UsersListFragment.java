@@ -17,12 +17,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import ru.bolobanov.chatclient.BusProvider;
+import de.greenrobot.event.EventBus;
 import ru.bolobanov.chatclient.PreferencesService_;
 import ru.bolobanov.chatclient.R;
 import ru.bolobanov.chatclient.UsersAdapter;
 import ru.bolobanov.chatclient.activity.ChatActivity;
 import ru.bolobanov.chatclient.activity.MobileChatActivity_;
+import ru.bolobanov.chatclient.events.OpenChatEvent;
 
 /**
  * Created by Bolobanov Nikolay on 26.12.15.
@@ -52,28 +53,11 @@ public class UsersListFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String receiver = (String) parent.getItemAtPosition(position);
-                HashMap<String, String> openChatEvent = new HashMap<>();
-                openChatEvent.put(ChatFragment.COMPANION_KEY, receiver);
-                BusProvider.getInstance().post(openChatEvent);
+                EventBus.getDefault().postSticky(new OpenChatEvent(receiver));
                 if (!((ChatActivity) getActivity()).isTablet) {
-                    Intent intent = new Intent(getActivity(), MobileChatActivity_.class);
-                    intent.putExtra(ChatFragment.COMPANION_KEY, receiver);
-                    startActivity(intent);
+                    startActivity(new Intent(getActivity(), MobileChatActivity_.class));
                 }
             }
         });
     }
-
-    public void onResume() {
-        super.onResume();
-        BusProvider.getInstance().register(this);
-    }
-
-
-    @Override
-    public void onPause() {
-        BusProvider.getInstance().unregister(this);
-        super.onPause();
-    }
-
 }

@@ -12,8 +12,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.squareup.otto.Subscribe;
-
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
@@ -26,13 +24,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import ru.bolobanov.chatclient.BusProvider;
+import de.greenrobot.event.EventBus;
 import ru.bolobanov.chatclient.HttpHelper;
 import ru.bolobanov.chatclient.db.HelperFactory;
 import ru.bolobanov.chatclient.db.mapping.Message;
 import ru.bolobanov.chatclient.PreferencesService_;
 import ru.bolobanov.chatclient.R;
 import ru.bolobanov.chatclient.db.DataBaseHelper;
+import ru.bolobanov.chatclient.events.MessagesResponseEvent;
+import ru.bolobanov.chatclient.events.OpenChatEvent;
+import ru.bolobanov.chatclient.events.TextEvent;
 
 /**
  * Created by Bolobanov Nikolay on 26.12.15.
@@ -75,15 +76,16 @@ public class ChatFragment extends Fragment implements TextView.OnEditorActionLis
         } else {
             showStub();
         }
-        final Intent receivedIntent = getActivity().getIntent();
-        if (receivedIntent != null) {
-            if (receivedIntent.hasExtra(COMPANION_KEY)) {
-                String companion = receivedIntent.getStringExtra(COMPANION_KEY);
-                HashMap<String, String> eventMap = new HashMap<>();
-                eventMap.put(COMPANION_KEY, companion);
-                getCompanion(eventMap);
-            }
-        }
+//        final Intent receivedIntent = getActivity().getIntent();
+//        if (receivedIntent != null) {
+//            if (receivedIntent.hasExtra(COMPANION_KEY)) {
+//                String companion = receivedIntent.getStringExtra(COMPANION_KEY);
+//                //TODO: отобразить имя компаньёна на экране и в поле активити
+////                HashMap<String, String> eventMap = new HashMap<>();
+////                eventMap.put(COMPANION_KEY, companion);
+////                getCompanion(eventMap);
+//            }
+//        }
         messageEdit.setOnEditorActionListener(this);
         super.onActivityCreated(savedInstanceState);
     }
@@ -97,11 +99,9 @@ public class ChatFragment extends Fragment implements TextView.OnEditorActionLis
         super.onSaveInstanceState(outState);
     }
 
-
-    @Subscribe
-    public void getMessage(ArrayList<Message> pMessages) {
+    public void onEventMainThread(MessagesResponseEvent event) {
         List<Message> myMessages = new ArrayList<>();
-        for (Message message : pMessages)
+        for (Message message : event.mMessages)
             if (message.getSender().equals(mCompanion)) {
                 myMessages.add(message);
             }
@@ -110,9 +110,8 @@ public class ChatFragment extends Fragment implements TextView.OnEditorActionLis
         }
     }
 
-    @Subscribe
-    public void getCompanion(HashMap<String, String> openChatEvent) {
-        mCompanion = openChatEvent.get(COMPANION_KEY);
+    public void onEvent(OpenChatEvent event) {
+        mCompanion = event.mCompanion;
         cleanChat();
         receiverText.setText("Чат с " + mCompanion);
         DataBaseHelper dbHelper = HelperFactory.getHelper();
@@ -122,9 +121,9 @@ public class ChatFragment extends Fragment implements TextView.OnEditorActionLis
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        EventBus.getDefault().removeStickyEvent(event);
         hideStub();
     }
-
 
     private void addMessagesToChat(List<Message> messagesList) {
         for (Message message : messagesList) {
@@ -142,9 +141,10 @@ public class ChatFragment extends Fragment implements TextView.OnEditorActionLis
         chatEdit.setText(chatBuilder.toString());
     }
 
+    @Override
     public void onResume() {
         super.onResume();
-        BusProvider.getInstance().register(this);
+        EventBus.getDefault().registerSticky(this);
     }
 
     @Click(R.id.sendButton)
@@ -170,7 +170,7 @@ public class ChatFragment extends Fragment implements TextView.OnEditorActionLis
 
     @Override
     public void onPause() {
-        BusProvider.getInstance().unregister(this);
+        EventBus.getDefault().unregister(this);
         super.onPause();
     }
 

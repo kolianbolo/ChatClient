@@ -9,10 +9,12 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import ru.bolobanov.chatclient.BusProvider;
+import de.greenrobot.event.EventBus;
 import ru.bolobanov.chatclient.Constants;
 import ru.bolobanov.chatclient.HttpHelper;
 import ru.bolobanov.chatclient.db.mapping.Message;
+import ru.bolobanov.chatclient.events.LoginResponseEvent;
+import ru.bolobanov.chatclient.events.MessagesResponseEvent;
 
 /**
  * Created by Bolobanov Nikolay on 27.12.15.
@@ -58,16 +60,7 @@ class ReceivingRunnable implements Runnable {
 
                 messagesList.add(node);
             }
-            Handler mainHandler = new Handler(mContext.getMainLooper());
-            Runnable busMessage = new Runnable() {
-                @Override
-                public void run() {
-                    BusProvider.getInstance().post(messagesList);
-
-                }
-            };
-            mainHandler.post(busMessage);
-
+            EventBus.getDefault().post(new MessagesResponseEvent(messagesList));
         } catch (Exception e) {
             e.printStackTrace();
         }

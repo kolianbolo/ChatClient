@@ -6,8 +6,10 @@ import android.util.Log;
 
 import org.json.JSONObject;
 
-import ru.bolobanov.chatclient.BusProvider;
+import de.greenrobot.event.EventBus;
 import ru.bolobanov.chatclient.HttpHelper;
+import ru.bolobanov.chatclient.events.LoginResponseEvent;
+import ru.bolobanov.chatclient.events.TextEvent;
 
 /**
  * Created by Bolobanov Nikolay on 25.12.15.
@@ -41,25 +43,12 @@ class LoginRunnable implements Runnable {
     }
 
     private void postJSON(final JSONObject pJSON) {
-        Handler mainHandler = new Handler(mContext.getMainLooper());
-        Runnable busMessage = new Runnable() {
-            @Override
-            public void run() {
-                BusProvider.getInstance().post(pJSON);
-            }
-        };
-        mainHandler.post(busMessage);
+        EventBus.getDefault().post(new LoginResponseEvent(pJSON));
+
     }
 
     private void postErrorMessage() {
-        Handler mainHandler = new Handler(mContext.getMainLooper());
-        Runnable busMessage = new Runnable() {
-            @Override
-            public void run() {
-                BusProvider.getInstance().post("некорректный ответ от сервера");
-            }
-        };
-        mainHandler.post(busMessage);
+        EventBus.getDefault().post(new TextEvent("некорректный ответ сервера"));
     }
 
 }
