@@ -72,6 +72,7 @@ public class ChatFragment extends Fragment implements TextView.OnEditorActionLis
         if (savedInstanceState != null) {
             mCompanion = savedInstanceState.getString(COMPANION_KEY);
             loadHistory(mCompanion);
+            hideStub();
         } else {
             showStub();
         }

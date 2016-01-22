@@ -22,7 +22,9 @@ import ru.bolobanov.chat_client.PreferencesService_;
 import ru.bolobanov.chat_client.R;
 import ru.bolobanov.chat_client.UsersAdapter;
 import ru.bolobanov.chat_client.activity.MobileChatActivity_;
+import ru.bolobanov.chat_client.events.MessagesResponseEvent;
 import ru.bolobanov.chat_client.events.OpenChatEvent;
+import ru.bolobanov.chat_client.events.UsersResponseEvent;
 
 /**
  * Created by Bolobanov Nikolay on 26.12.15.
@@ -38,23 +40,7 @@ public class UsersListFragment extends Fragment {
 
     @AfterViews
     public void init() {
-        List<String> users = new ArrayList<>();
-        try {
-            JSONArray usersJSON = new JSONArray(mPreferences.users().get());
-            for (int i = 0; i < usersJSON.length(); i++) {
-                users.add(usersJSON.getJSONObject(i).getString("name"));
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        list.setAdapter(new UsersAdapter(users, getActivity()));
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String receiver = (String) parent.getItemAtPosition(position);
-                openChat(receiver);
-            }
-        });
+        initUsersList(convertUsers(loadUsers()));
         String companion = getActivity().getIntent().getStringExtra(ChatFragment.COMPANION_KEY);
         if (companion != null) {
             EventBus.getDefault().removeAllStickyEvents();
@@ -62,10 +48,64 @@ public class UsersListFragment extends Fragment {
         }
     }
 
+    private JSONArray loadUsers() {
+        JSONArray returned = null;
+        try {
+            if (!mPreferences.users().get().isEmpty()) {
+                returned = new JSONArray(mPreferences.users().get());
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return returned;
+    }
+
     private void openChat(String pCompanion) {
         EventBus.getDefault().postSticky(new OpenChatEvent(pCompanion));
         if (getResources().getConfiguration().smallestScreenWidthDp < Constants.SMALLEST_SCREEN_WIDTH_DP) {
             startActivity(new Intent(getActivity(), MobileChatActivity_.class));
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        EventBus.getDefault().registerSticky(this);
+    }
+
+    @Override
+    public void onPause() {
+        EventBus.getDefault().unregister(this);
+        super.onPause();
+    }
+
+    private void initUsersList(List<String> pUsers) {
+        list.setAdapter(new UsersAdapter(pUsers, getActivity()));
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String receiver = (String) parent.getItemAtPosition(position);
+                openChat(receiver);
+            }
+        });
+    }
+
+    private List<String> convertUsers(JSONArray usersJSON) {
+        List<String> users = new ArrayList<>();
+        if (usersJSON == null) {
+            return users;
+        }
+        try {
+            for (int i = 0; i < usersJSON.length(); i++) {
+                users.add(usersJSON.getJSONObject(i).getString("name"));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return users;
+    }
+
+    public void onEventMainThread(UsersResponseEvent event) {
+        initUsersList(convertUsers(event.usersArray));
     }
 }

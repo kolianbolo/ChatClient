@@ -43,7 +43,7 @@
             android:name="ru.bolobanov.chat_client.services.UsersService_"
             android:exported="false"
             android:label="users service"
-            android:stopWithTask="true" />
+            android:stopWithTask="false" />
 
         <service
             android:name="ru.bolobanov.chat_client.services.ReceivingService_"
