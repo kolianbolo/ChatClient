@@ -1,10 +1,7 @@
 package ru.bolobanov.chat_client.fragment;
 
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.Intent;
-import android.os.Debug;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -24,7 +21,6 @@ import ru.bolobanov.chat_client.Constants;
 import ru.bolobanov.chat_client.PreferencesService_;
 import ru.bolobanov.chat_client.R;
 import ru.bolobanov.chat_client.UsersAdapter;
-import ru.bolobanov.chat_client.activity.ChatActivity;
 import ru.bolobanov.chat_client.activity.MobileChatActivity_;
 import ru.bolobanov.chat_client.events.OpenChatEvent;
 
@@ -68,7 +64,6 @@ public class UsersListFragment extends Fragment {
 
     private void openChat(String pCompanion) {
         EventBus.getDefault().postSticky(new OpenChatEvent(pCompanion));
-        FragmentManager fragmentManager = getActivity().getFragmentManager();
         if (getResources().getConfiguration().smallestScreenWidthDp < Constants.SMALLEST_SCREEN_WIDTH_DP) {
             startActivity(new Intent(getActivity(), MobileChatActivity_.class));
         }

@@ -1,9 +1,5 @@
 package ru.bolobanov.chat_client.activity;
 
-import android.app.FragmentManager;
-import android.os.Bundle;
-
-import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 
 import ru.bolobanov.chat_client.R;

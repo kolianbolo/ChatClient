@@ -40,7 +40,7 @@ public class ParentActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString("sessionUUID", "");
                 editor.putString("login", "");
-                editor.commit();
+                editor.apply();
                 startActivity(new Intent(this, LoginActivity_.class).
                         setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
                 return true;
