@@ -17,4 +17,11 @@ public final class Constants {
     public static final int GET_USERS_PERIOD = 30 * 1000;
 
     public static final int SMALLEST_SCREEN_WIDTH_DP = 600;
+
+    public static final String ERROR_CODE = "error_code";
+    public static final String ERROR_MESSAGE = "error_message";
+
+
+    public static final int OK = 0;
+    public static final int BAD_SESSION = 3;
 }

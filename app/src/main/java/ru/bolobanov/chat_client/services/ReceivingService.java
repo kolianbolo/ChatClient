@@ -20,6 +20,7 @@ import ru.bolobanov.chat_client.activity.ChatActivity_;
 import ru.bolobanov.chat_client.db.DataBaseHelper;
 import ru.bolobanov.chat_client.db.HelperFactory;
 import ru.bolobanov.chat_client.db.mapping.Message;
+import ru.bolobanov.chat_client.events.LogoutEvent;
 import ru.bolobanov.chat_client.events.MessagesResponseEvent;
 import ru.bolobanov.chat_client.fragment.ChatFragment;
 
@@ -64,6 +65,12 @@ public class ReceivingService extends Service {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void onEventMainThread(LogoutEvent event) {
+        mPreferences.login().put("");
+        mPreferences.sessionUUID().put("");
+        stopSelf();
     }
 
     private void notification(Message pMessage) {

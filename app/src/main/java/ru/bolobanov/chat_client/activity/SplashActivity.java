@@ -10,6 +10,7 @@ import org.androidannotations.annotations.sharedpreferences.Pref;
 import ru.bolobanov.chat_client.PreferencesService_;
 import ru.bolobanov.chat_client.R;
 import ru.bolobanov.chat_client.services.ReceivingService_;
+import ru.bolobanov.chat_client.services.UsersService_;
 
 /**
  * Created by Bolobanov Nikolay on 30.12.15.
@@ -28,6 +29,7 @@ public class SplashActivity extends Activity {
                     setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
         } else {
             startService(new Intent(this, ReceivingService_.class));
+            startService(new Intent(this, UsersService_.class));
             startActivity(new Intent(this, ChatActivity_.class).
                     setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
         }

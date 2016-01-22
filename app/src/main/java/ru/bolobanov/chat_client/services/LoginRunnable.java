@@ -2,9 +2,11 @@ package ru.bolobanov.chat_client.services;
 
 import android.util.Log;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import de.greenrobot.event.EventBus;
+import ru.bolobanov.chat_client.Constants;
 import ru.bolobanov.chat_client.HttpHelper;
 import ru.bolobanov.chat_client.events.LoginResponseEvent;
 import ru.bolobanov.chat_client.events.TextEvent;
@@ -31,20 +33,18 @@ class LoginRunnable implements Runnable {
         try {
             Log.d("LoginRunnable", "run()");
             JSONObject jsonResponse = new JSONObject(helper.login(mLogin, mPassword, mBaseUrl));
-            postJSON(jsonResponse);
+            post(jsonResponse);
         } catch (Exception e) {
             e.printStackTrace();
-            postErrorMessage();
         }
     }
 
-    private void postJSON(final JSONObject pJSON) {
-        EventBus.getDefault().post(new LoginResponseEvent(pJSON));
+    private void post(final JSONObject pJSON) throws JSONException {
+        if (pJSON.getInt(Constants.ERROR_CODE) == 0) {
+            EventBus.getDefault().post(new LoginResponseEvent(pJSON));
+        } else {
+            EventBus.getDefault().post(new TextEvent(pJSON.optString(Constants.ERROR_MESSAGE)));
+        }
 
     }
-
-    private void postErrorMessage() {
-        EventBus.getDefault().post(new TextEvent("некорректный ответ сервера"));
-    }
-
 }

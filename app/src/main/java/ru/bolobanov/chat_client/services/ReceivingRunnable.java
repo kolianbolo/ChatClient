@@ -3,6 +3,7 @@ package ru.bolobanov.chat_client.services;
 import android.util.Log;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import de.greenrobot.event.EventBus;
 import ru.bolobanov.chat_client.Constants;
 import ru.bolobanov.chat_client.HttpHelper;
 import ru.bolobanov.chat_client.db.mapping.Message;
+import ru.bolobanov.chat_client.events.LogoutEvent;
 import ru.bolobanov.chat_client.events.MessagesResponseEvent;
 
 /**
@@ -29,7 +31,6 @@ class ReceivingRunnable implements Runnable {
     @Override
     public void run() {
         while (true) {
-            Log.d("ReceivingRunnable", "run()");
             getMessages();
             try {
                 Thread.sleep(Constants.GET_MESSAGES_PERIOD);
@@ -43,21 +44,32 @@ class ReceivingRunnable implements Runnable {
         HttpHelper helper = new HttpHelper();
         try {
             JSONObject responseJSON = new JSONObject(helper.getMessages(mBaseUrl, mSession));
-            Log.d("ReceivingRunnable", responseJSON.toString());
-            final JSONArray messagesJSON = responseJSON.getJSONArray("messages");
-            final ArrayList<Message> messagesList = new ArrayList<>();
-            for (int i = 0; i < messagesJSON.length(); i++) {
-                Message node = new Message();
-                node.setMessage(messagesJSON.getJSONObject(i).getString("message"));
-                node.setSender(messagesJSON.getJSONObject(i).getString("sender"));
-                node.setReceiver(messagesJSON.getJSONObject(i).getString("receiver"));
-                node.setTimestamp(messagesJSON.getJSONObject(i).getLong("timestamp"));
-                messagesList.add(node);
+            int error_code = responseJSON.getInt(Constants.ERROR_CODE);
+            switch (error_code) {
+                case Constants.OK:
+                    final JSONArray messagesJSON = responseJSON.getJSONArray("messages");
+                    processingMessages(messagesJSON);
+                    break;
+                case Constants.BAD_SESSION:
+                    EventBus.getDefault().post(new LogoutEvent());
+                    break;
             }
-            EventBus.getDefault().postSticky(new MessagesResponseEvent(messagesList));
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
+         private void processingMessages(JSONArray pMessagesJSON ) throws JSONException {
+             final ArrayList<Message> messagesList = new ArrayList<>();
+             for (int i = 0; i < pMessagesJSON.length(); i++) {
+                 Message node = new Message();
+                 node.setMessage(pMessagesJSON.getJSONObject(i).getString("message"));
+                 node.setSender(pMessagesJSON.getJSONObject(i).getString("sender"));
+                 node.setReceiver(pMessagesJSON.getJSONObject(i).getString("receiver"));
+                 node.setTimestamp(pMessagesJSON.getJSONObject(i).getLong("timestamp"));
+                 messagesList.add(node);
+             }
+             EventBus.getDefault().postSticky(new MessagesResponseEvent(messagesList));
+         }
+
+
 }

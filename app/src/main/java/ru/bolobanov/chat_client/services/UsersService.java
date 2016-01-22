@@ -9,6 +9,7 @@ import org.androidannotations.annotations.sharedpreferences.Pref;
 
 import de.greenrobot.event.EventBus;
 import ru.bolobanov.chat_client.PreferencesService_;
+import ru.bolobanov.chat_client.events.LogoutEvent;
 import ru.bolobanov.chat_client.events.UsersResponseEvent;
 
 /**
@@ -40,6 +41,10 @@ public class UsersService extends Service {
     public void onEventMainThread(UsersResponseEvent event) {
 
         mPreferences.users().put(event.usersArray.toString());
+    }
+
+    public void onEventMainThread(LogoutEvent event) {
+        stopSelf();
     }
 
     @Override
