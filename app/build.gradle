@@ -14,7 +14,7 @@ buildscript {
 apt {
     arguments {
         androidManifestFile variant.outputs[0].processResources.manifestFile
-        resourcePackageName 'ru.bolobanov.chatclient'
+        resourcePackageName 'ru.bolobanov.chat_client'
     }
 }
 

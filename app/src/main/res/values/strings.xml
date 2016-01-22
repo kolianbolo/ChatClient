@@ -20,7 +20,7 @@
     <string name="login_button">login</string>
     <string name="send_button">send</string>
 
-    <string name="wait">Please wait...</string>
+    <string name="wait">Please wait…</string>
     <string name="logout">logout</string>
 
     <string-array name="duration">

@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="ru.bolobanov.chatclient">
+    package="ru.bolobanov.chat_client">
 
     <application
-        android:name=".ChatApplication_"
+        android:name="ru.bolobanov.chat_client.ChatApplication_"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activity.LoginActivity_"
+            android:name="ru.bolobanov.chat_client.activity.LoginActivity_"
             android:label="@string/app_name" />
         <activity
-            android:name=".activity.PreferenceActivity"
-            android:label="@string/app_name" />
-
-        <activity
-            android:name=".activity.ChatActivity_"
+            android:name="ru.bolobanov.chat_client.activity.PreferenceActivity"
             android:label="@string/app_name" />
 
         <activity
-            android:name=".activity.MobileChatActivity_"
+            android:name="ru.bolobanov.chat_client.activity.ChatActivity_"
             android:label="@string/app_name" />
 
         <activity
-            android:name=".activity.SplashActivity_"
+            android:name="ru.bolobanov.chat_client.activity.MobileChatActivity_"
+            android:label="@string/app_name" />
+
+        <activity
+            android:name="ru.bolobanov.chat_client.activity.SplashActivity_"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,22 +34,22 @@
         </activity>
 
         <service
-            android:name=".services.LoginService_"
+            android:name="ru.bolobanov.chat_client.services.LoginService_"
             android:exported="false"
             android:label="login service"
             android:stopWithTask="true" />
 
         <service
-            android:name=".services.UsersService_"
+            android:name="ru.bolobanov.chat_client.services.UsersService_"
             android:exported="false"
             android:label="users service"
             android:stopWithTask="true" />
 
         <service
-            android:name=".services.ReceivingService_"
+            android:name="ru.bolobanov.chat_client.services.ReceivingService_"
             android:exported="false"
             android:label="receiving service"
-            android:stopWithTask="true">
+            android:stopWithTask="false">
 
         </service>
     </application>

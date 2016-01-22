@@ -2,12 +2,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="horizontal"
+    android:baselineAligned="false">
 
     <fragment
         android:id="@+id/fragment_list"
         class="ru.bolobanov.chat_client.fragment.UsersListFragment_"
-        android:layout_width="match_parent"
+        android:layout_width="420dp"
         android:layout_height="match_parent"/>
+
+    <fragment
+        android:id="@+id/fragment_chat"
+        class="ru.bolobanov.chat_client.fragment.ChatFragment_"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="3"/>
 
 </LinearLayout>
