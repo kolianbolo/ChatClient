@@ -10,20 +10,4 @@ import ru.bolobanov.chat_client.R;
 @EActivity(R.layout.a_chat)
 public class ChatActivity extends ParentActivity {
 
-
-//    @Override
-//    public void onCreate(Bundle savedInstanceState) {
-//        FragmentManager fragmentManager = getFragmentManager();
-//        if (fragmentManager.findFragmentById(R.id.fragment_chat) != null) {
-//            isTablet = true;
-//        }
-//        super.onCreate(savedInstanceState);
-//    }
-
-//    protected void init() {
-//        FragmentManager fragmentManager = getFragmentManager();
-//        if (fragmentManager.findFragmentById(R.id.fragment_chat) != null) {
-//            isTablet = true;
-//        }
-//    }
 }

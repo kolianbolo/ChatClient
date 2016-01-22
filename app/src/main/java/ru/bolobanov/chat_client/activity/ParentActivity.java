@@ -21,6 +21,7 @@ public class ParentActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setTitle(PreferenceManager.getDefaultSharedPreferences(this).getString("login", ""));
     }
 
 
