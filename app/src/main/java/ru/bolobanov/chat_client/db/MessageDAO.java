@@ -34,14 +34,10 @@ public class MessageDAO extends BaseDaoImpl<Message, Integer> {
         return queryBuilder.query();
     }
 
-    public void deleteOldMessages(long deadline) {
-        try {
-            DeleteBuilder<Message, Integer> deleteBuilder = deleteBuilder();
-            deleteBuilder.where().lt(Constants.COLUMN_TIMESTAMP, deadline);
-            deleteBuilder.delete();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public void deleteOldMessages(long deadline) throws SQLException {
+        DeleteBuilder<Message, Integer> deleteBuilder = deleteBuilder();
+        deleteBuilder.where().lt(Constants.COLUMN_TIMESTAMP, deadline);
+        deleteBuilder.delete();
     }
 
 }

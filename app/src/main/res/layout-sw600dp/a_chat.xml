@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/fragment_list"
         class="ru.bolobanov.chat_client.fragment.UsersListFragment_"
-        android:layout_width="420dp"
+        android:layout_width="300dp"
         android:layout_height="match_parent"/>
 
     <fragment
