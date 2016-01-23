@@ -25,8 +25,12 @@ public class MessageDAO extends BaseDaoImpl<Message, Integer> {
         QueryBuilder<Message, Integer> queryBuilder = this.queryBuilder();
         Where where = queryBuilder.where();
         where.or(
-                where.and(where.like(Constants.COLUMN_RECEIVER, pFirst), where.like(Constants.COLUMN_SENDER, pSecond)),
-                where.and(where.like(Constants.COLUMN_RECEIVER, pSecond), where.like(Constants.COLUMN_SENDER, pFirst)));
+                where.and(
+                        where.like(Constants.COLUMN_RECEIVER, pFirst),
+                        where.like(Constants.COLUMN_SENDER, pSecond)),
+                where.and(
+                        where.like(Constants.COLUMN_RECEIVER, pSecond),
+                        where.like(Constants.COLUMN_SENDER, pFirst)));
         return queryBuilder.query();
     }
 
