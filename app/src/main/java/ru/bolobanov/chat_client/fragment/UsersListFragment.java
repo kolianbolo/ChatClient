@@ -85,6 +85,13 @@ public class UsersListFragment extends Fragment {
     }
 
     private void initUsersList(List<String> pUsers) {
+        String deletedUser = null;
+        for(String user: pUsers){
+            if(user.equals(mPreferences.login().get())){
+                deletedUser = user;
+            }
+        }
+        pUsers.remove(deletedUser);
         list.setAdapter(new UsersAdapter(pUsers, getActivity()));
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
