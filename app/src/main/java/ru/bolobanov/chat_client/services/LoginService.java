@@ -27,10 +27,13 @@ public class LoginService extends Service {
         }
         final String address = mPreferences.serverAddress().get();
         final String port = mPreferences.serverPort().get();
-        mLoginThread = new Thread(new LoginRunnable(intent.getStringExtra("login"), intent.getStringExtra("password"),
-                "http://" + address + ":" + port));
-        mLoginThread.start();
-        return START_STICKY;
+        final String login = intent.getStringExtra("login");
+        final String password = intent.getStringExtra("password");
+        if ((login != null) && (password != null)) {
+            mLoginThread = new Thread(new LoginRunnable(login, password, "http://" + address + ":" + port));
+            mLoginThread.start();
+        }
+        return START_NOT_STICKY;
     }
 
     @Override
