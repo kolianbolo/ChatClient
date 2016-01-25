@@ -5,6 +5,8 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.ConnectException;
+
 import de.greenrobot.event.EventBus;
 import ru.bolobanov.chat_client.Constants;
 import ru.bolobanov.chat_client.HttpHelper;
@@ -34,6 +36,8 @@ class LoginRunnable implements Runnable {
             Log.d("LoginRunnable", "run()");
             JSONObject jsonResponse = new JSONObject(helper.login(mLogin, mPassword, mBaseUrl));
             post(jsonResponse);
+        }catch(ConnectException e){
+            EventBus.getDefault().post(new TextEvent("Не удалось подключится к верверу" ));
         } catch (Exception e) {
             e.printStackTrace();
         }
