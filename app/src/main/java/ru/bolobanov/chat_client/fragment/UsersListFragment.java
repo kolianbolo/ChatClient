@@ -21,6 +21,7 @@ import ru.bolobanov.chat_client.Constants;
 import ru.bolobanov.chat_client.PreferencesService_;
 import ru.bolobanov.chat_client.R;
 import ru.bolobanov.chat_client.UsersAdapter;
+import ru.bolobanov.chat_client.activity.LoginActivity_;
 import ru.bolobanov.chat_client.activity.MobileChatActivity_;
 import ru.bolobanov.chat_client.events.OpenChatEvent;
 import ru.bolobanov.chat_client.events.UsersResponseEvent;
@@ -42,8 +43,13 @@ public class UsersListFragment extends Fragment {
         initUsersList(convertUsers(loadUsers()));
         String companion = getActivity().getIntent().getStringExtra(ChatFragment.COMPANION_KEY);
         if (companion != null) {
-            EventBus.getDefault().removeAllStickyEvents();
-            openChat(companion);
+            if (mPreferences.sessionUUID().get().isEmpty()) {
+                startActivity(new Intent(getActivity(), LoginActivity_.class).
+                        setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+            } else {
+                EventBus.getDefault().removeAllStickyEvents();
+                openChat(companion);
+            }
         }
     }
 
