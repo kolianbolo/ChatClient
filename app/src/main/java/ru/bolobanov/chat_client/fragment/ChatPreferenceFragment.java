@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
@@ -28,6 +29,7 @@ public class ChatPreferenceFragment extends PreferenceFragment implements Shared
 
     private final static String PORT_KEY = "serverPort";
     private final static String ADDRESS_KEY = "serverAddress";
+    private final static String HISTORY_KEY = "lengthHistory";
 
     private static final Pattern ADDRESS_PATTERN
             = Pattern.compile(
@@ -50,8 +52,10 @@ public class ChatPreferenceFragment extends PreferenceFragment implements Shared
         PreferenceManager.getDefaultSharedPreferences(getActivity()).registerOnSharedPreferenceChangeListener(this);
         EditTextPreference addressPreference = (EditTextPreference) findPreference(ADDRESS_KEY);
         EditTextPreference portPreference = (EditTextPreference) findPreference(PORT_KEY);
+        ListPreference historyPreference = (ListPreference) findPreference(HISTORY_KEY);
         addressPreference.setSummary(addressPreference.getText());
         portPreference.setSummary(portPreference.getText());
+        historyPreference.setSummary(historyPreference.getEntry());
         addressPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -67,6 +71,8 @@ public class ChatPreferenceFragment extends PreferenceFragment implements Shared
                 return portVerify(newPort);
             }
         });
+
+
     }
 
     @Override
@@ -77,9 +83,9 @@ public class ChatPreferenceFragment extends PreferenceFragment implements Shared
         } else if (PORT_KEY.equals(key)) {
             EditTextPreference preference = (EditTextPreference) findPreference(key);
             preference.setSummary(preference.getText());
-        }
-        if (getActivity() != null) {
-            getActivity().startService(new Intent(getActivity(), UsersService_.class));
+        } else if (HISTORY_KEY.equals(key)) {
+            ListPreference preference = (ListPreference) findPreference(key);
+            preference.setSummary(preference.getEntry());
         }
     }
 
@@ -92,5 +98,4 @@ public class ChatPreferenceFragment extends PreferenceFragment implements Shared
         Matcher m = PORT_PATTERN.matcher(portStr);
         return m.matches();
     }
-
 }

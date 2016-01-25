@@ -75,7 +75,8 @@ public class ReceivingService extends Service {
 
     private void notification(Message pMessage) {
         Notification.Builder builder = new Notification.Builder(this);
-        Intent notificationIntent = new Intent(this, ChatActivity_.class);
+        Intent notificationIntent = new Intent(this, ChatActivity_.class).
+                setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         notificationIntent.putExtra(ChatFragment.COMPANION_KEY, pMessage.getSender());
         PendingIntent contentIntent = PendingIntent.getActivity(this,
                 0, notificationIntent,
@@ -86,6 +87,7 @@ public class ReceivingService extends Service {
                 .setAutoCancel(true)
                 .setContentTitle(pMessage.getSender())
                 .setContentText(pMessage.getMessage());
+
         Notification notification = builder.build();
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
         notificationManager.notify(Constants.NOTIFY_ID, notification);
