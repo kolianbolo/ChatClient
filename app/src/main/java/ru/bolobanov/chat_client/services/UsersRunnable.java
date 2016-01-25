@@ -24,9 +24,9 @@ class UsersRunnable implements Runnable {
     @Override
     public void run() {
         while (true) {
-            Log.d("UsersRunnable", "run()");
-            loadUsers();
             try {
+                Log.d("UsersRunnable", "run()");
+                loadUsers();
                 Thread.sleep(Constants.GET_USERS_PERIOD);
             } catch (InterruptedException e) {
                 return;

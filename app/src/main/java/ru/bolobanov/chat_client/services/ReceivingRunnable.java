@@ -29,8 +29,8 @@ class ReceivingRunnable implements Runnable {
     @Override
     public void run() {
         while (true) {
-            getMessages();
             try {
+                getMessages();
                 Thread.sleep(Constants.GET_MESSAGES_PERIOD);
             } catch (InterruptedException e) {
                 return;
